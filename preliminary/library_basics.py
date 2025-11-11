@@ -51,7 +51,9 @@ class CodingVideo:
 
         formatted_duration = str(round(self.duration / 60, 2)).replace(".", ":")
 
-        return f"Total Frames: {int(self.frame_count)}, FPS: {round(self.fps)}, Duration(mm:ss): {formatted_duration}"
+        return (f"Total Frames: {int(self.frame_count)}, " +
+                f"FPS: {round(self.fps)}, " +
+                f"Duration(mm:ss): {formatted_duration}")
 
     def get_frame_number_at_time(self, seconds: int | float) -> int:
         """Given a time in seconds, returns the value of the nearest frame"""
