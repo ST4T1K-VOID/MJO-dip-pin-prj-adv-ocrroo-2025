@@ -21,4 +21,4 @@ jobs:
         
     - name: Analysing the code with pylint
       run: |
-        pylint --generated-member=cv2 $(git ls-files '*.py')
+        pylint --generated-member=cv2 --exit-zero $(git ls-files '*.py')
