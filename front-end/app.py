@@ -1,15 +1,17 @@
 import requests
 
 from flask import Flask
-from flask import render_template
-from flask import request
+from flask import render_template, redirect
+from flask import request, url_for
 
 app = Flask(__name__)
-#NOTE: flask run --port 8001
+#NOTE: flask run --port 8001 --debug
 
 @app.route("/")
-def index():
-    return render_template("index.html")
+def index(transcript = None):
+    print('we are here, sire')
+    video = "./resources/oop.mp4"
+    return render_template("index.html", transcript=transcript)
 
 
 @app.route("/generate-transcript/")
@@ -25,6 +27,4 @@ def get_transcript():
     print(response)
 
     #TODO replace with redirect
-    return render_template("index.html", transcript=response)
-
-
+    return  redirect(url_for('index', transcript=response))
