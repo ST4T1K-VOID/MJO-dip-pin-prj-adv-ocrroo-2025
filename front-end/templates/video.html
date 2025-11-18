@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>MJO-OCRROO</title>
+
+    <link rel="stylesheet" href="{{url_for('static',filename='dist/output.css')}}">
+    <!-- TODO: run this when changing styling or on initial project setup:
+     npx @tailwindcss/cli -i ./static/src/input.css -o ./static/dist/output.css --watch
+     -->
+
+</head>
+<body class="bg-gray-300 m-12 mt-0">
+<article class="bg-gray-200 px-4 pt-3 pb-12">
+
+    <a href="{{ '/' }}" class="bg-white p-2 lg:p-4 mb-6 rounded-lg
+              focus:bg-zinc-400 hover:bg-gray-400
+              ease-in-out transition-colors duration-250
+              flex text-sm font-medium justify-center
+              shadow-md w-fit">
+        Select a new video
+    </a>
+
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-5">
+        <div class="rounded md:col-span-2">
+            <video controls id="Video" class="rounded-md">
+                <!-- todo: change src to accept the video path from session data -->
+                <source src="../static/media/oop.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <div class="rounded p-6 ">
+            <form action="/generate-transcript" class="flex flex-col"
+                  method="POST">
+                <button type="submit"
+                        class="bg-white p-6 lg:p-10 rounded-lg
+                        focus:bg-zinc-400 hover:bg-gray-400
+                        ease-in-out transition-colors duration-250
+                        flex text-sm font-medium justify-center
+                        shadow-md">
+                    generate transcript
+                </button>
+
+                <input type="hidden" name="video_pos" id="Video_pos" value="0">
+
+                <script>
+                    video = document.getElementById('Video');
+                    output = document.getElementById('Video_pos')
+                    video.ontimeupdate = () => {
+                        let pos = parseInt(video.currentTime)
+                        console.log(pos);
+                        output.value = pos;
+                    }
+                </script>
+            </form>
+
+            <!-- more buttons here! -->
+        </div>
+
+        <div class="rounded md:col-span-2 text-left m-2">
+            <label for="TranscriptArea">Transcript:</label>
+            <textarea name="transcriptArea" id="TranscriptArea"
+                      class="p-2 rounded whitespace-pre-wrap w-full text-left bg-white"
+                      rows="8"
+                      readonly>{% if transcript %}{{ transcript }}{% else %}No transcript available{% endif %}
+            </textarea>
+            <!-- if/else is compressed to prevent unnecessary whitespace -->
+        </div>
+    </div>
+</article>
+
+</body>
+</html>
