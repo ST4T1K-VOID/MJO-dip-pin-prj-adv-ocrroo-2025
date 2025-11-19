@@ -7,7 +7,7 @@ from flask import request, url_for, session
 import json
 
 app = Flask(__name__)
-
+app.secret_key = "very_secret_key"
 # NOTE: flask run --port 8001 --debug
 
 @app.route("/")
@@ -41,13 +41,19 @@ def login():
 @app.route("/video")
 def video():
     transcript = request.args.get("transcript")
-
+    current_time = request.args.get("current_time")
     print(transcript)
 
     if transcript:
-        return render_template("video.html", transcript=transcript)
+        if current_time:
+            return render_template("video.html", current_time=current_time, transcript=transcript)
+        else:
+            return render_template("video.html", transcript=transcript)
     else:
-        return render_template("video.html")
+        if current_time:
+            return render_template("video.html", current_time=current_time)
+        else:
+            return render_template("video.html")
 
 @app.route("/generate-transcript", methods=["POST"])
 def get_transcript():
@@ -58,4 +64,4 @@ def get_transcript():
 
     response = response.decode(encoding='utf-8')
 
-    return redirect(url_for('video', transcript=response))
+    return redirect(url_for('video', current_time=video_position, transcript=response))
