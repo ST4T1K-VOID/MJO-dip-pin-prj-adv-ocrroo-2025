@@ -19,9 +19,11 @@ app = FastAPI()
 # You can add uploads later (not required for assessment)
 # For now, we will just hardcode are samples
 VIDEOS: dict[str, Path] = {
-    "demo": Path("./resources/oop.mp4")
+    "oop": Path("./resources/oop.mp4"),
+    "NotReal": Path("./resources/"),
+    "JustTesting": Path("./resources/"),
 }
-# dict structure: name / path
+# structure dict>count>int & video>list>dict>name>path
 # name: you refer to this (e.g. demo) in api endpoints
 
 

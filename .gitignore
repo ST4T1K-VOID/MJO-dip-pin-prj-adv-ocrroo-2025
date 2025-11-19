@@ -11,7 +11,7 @@ wheels/
 
 pylint_output.txt
 
-*/api/resources/
-*/front-end/static/resources/
+/api/resources/oop.mp4
+/front-end/static/media/
 
 node_modules

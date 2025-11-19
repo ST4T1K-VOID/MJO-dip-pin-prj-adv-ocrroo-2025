@@ -20,8 +20,8 @@ import pytesseract
 
 pytesseract.pytesseract.tesseract_cmd = r"C:\Users\OBRIEM.TDM\source\repos\tesseract\tesseract.exe"
 
-VID_PATH = Path("resources/oop.mp4")
-OUT_PATH = Path("resources/images/")
+VID_PATH = Path("media/oop.mp4")
+OUT_PATH = Path("media/images/")
 
 
 class CodingVideo:
@@ -126,7 +126,7 @@ class CodingVideo:
 
 def test():
     """Try out your class here"""
-    oop = CodingVideo("resources/oop.mp4")
+    oop = CodingVideo("media/oop.mp4")
     print(oop)
     oop.save_as_image(42)
     print(oop.get_text_from_frame(42))

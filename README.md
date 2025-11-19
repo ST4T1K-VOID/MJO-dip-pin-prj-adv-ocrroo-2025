@@ -53,7 +53,7 @@ you can test if the API is running by running a `curl` command from a diffferent
 curl 127.0.0.1:8000/[endpooint]
 ```
 `127.0.0.1:8000` may not work if you are running from a different port, you can check the terminal running the API.  
-for `endpoints` check [simple_api.py](./preliminary/simple_api.py)
+for `endpoints` check [simple_api.py](./api/simple_api.py)
 
 # How to Contribute
 
