@@ -4,12 +4,13 @@ Drive the API to complete "interprocess communication"
 
 Requirements
 """
+from pathlib import Path
+
+from library_basics import CodingVideo
 
 from fastapi import FastAPI, HTTPException
 from fastapi import Response
 from pydantic import BaseModel
-from pathlib import Path
-from library_basics import CodingVideo
 
 #NOTE: fastapi dev simple_api.py --port 8000
 app = FastAPI()
@@ -90,7 +91,9 @@ def video(vid: str):
 
 @app.get("/video/{vid}/frame/{t}", response_class=Response)
 def video_frame(vid: str, t: float):
-    #get a video frame as bytes
+    """
+    get a video frame as bytes
+    """
     try:
         video = _open_vid_or_404(vid)
         return Response(content=video.get_image_as_bytes(t), media_type="image/png")
@@ -99,8 +102,10 @@ def video_frame(vid: str, t: float):
 
 
 @app.get("/video/{vid}/frame/{t}/ocr", response_class=Response)
-#get the text (ocr) from a video frame
 def frame_ocr(vid: str, t: int | float):
+    """
+    get the text (ocr) from a given video frame
+    """
     try:
         video = _open_vid_or_404(vid)
         return Response(content=video.get_text_from_frame(t))
