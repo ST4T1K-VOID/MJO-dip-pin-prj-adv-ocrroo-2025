@@ -13,6 +13,17 @@ class BookmarkManager:
         if not os.path.exists(db_path):
             self.create_bookmarks_db()
 
+
+    def check_existing_user(self):
+        """Check if a user exists in the users table. If not, adds user to users table"""
+        try:
+            self.cursor.execute("Select * from users")
+            users = self.cursor.fetchall()
+            if not self.user in users:
+                self.cursor.execute("INSERT INTO users (user_id) VALUES (?)", (self.user,))
+        except sqlite3.OperationalError as e:
+            print(e)
+
     def create_bookmarks_db(self):
         """Creates database tables required for BookmarkManager"""
         # create bookmarks table
@@ -38,6 +49,8 @@ class BookmarkManager:
         except sqlite3.OperationalError as e:
             print(e)
             raise e
+
+
 
     def get_tables(self):
         """Returns all tables in the database.

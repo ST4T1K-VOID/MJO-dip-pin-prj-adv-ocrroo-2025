@@ -40,6 +40,7 @@ def login():
     tables = bookmark_manager.get_tables()
     if len(tables) == 0:
         bookmark_manager.create_bookmarks_db()
+    bookmark_manager.check_existing_user()
     print(video_id, user)
 
     #try get user bookmarks for video
