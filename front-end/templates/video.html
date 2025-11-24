@@ -39,6 +39,19 @@
                 window.onload = SetCurrentTime;
             </script>
         </div>
+        {% if bookmarks %}
+        <div id="bookmark_area">
+            <ul id="bookmark_bar" class="flex flex-row gap-5 overflow-x">
+                {% for bookmark in bookmarks %}
+                <li>
+                    <a href="{{ url_for('load_bookamark' bookmark_id=bookmark['id'])}}">
+                        <h3>{{ bookmark["title"]}}</h3>
+                        <p>{{ bookmark["time"]}}</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        {% end if %}
 
         <div class="rounded p-6 ">
             <form action="/generate-transcript" class="flex flex-col"
