@@ -14,13 +14,25 @@ class BookmarkManager:
             self.create_bookmarks_db()
 
 
-    def check_existing_user(self):
+    def check_user_in_db(self):
         """Check if a user exists in the users table. If not, adds user to users table"""
         try:
             self.cursor.execute("Select * from users")
             users = self.cursor.fetchall()
             if not self.user in users:
                 self.cursor.execute("INSERT INTO users (user_id) VALUES (?)", (self.user,))
+                self.conn.commit()
+        except sqlite3.OperationalError as e:
+            print(e)
+
+    def check_video_in_db(self, video_id):
+        """Check if a user exists in the users table. If not, adds user to users table"""
+        try:
+            self.cursor.execute("Select video_id from videos")
+            videos = self.cursor.fetchall()
+            if not video_id in videos:
+                self.cursor.execute("INSERT INTO videos (video_id) VALUES (?)", (video_id,))
+                self.conn.commit()
         except sqlite3.OperationalError as e:
             print(e)
 

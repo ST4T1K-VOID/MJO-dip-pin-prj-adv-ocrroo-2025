@@ -38,12 +38,15 @@ def login():
     session['user'] = user
     bookmark_manager = BookmarkManager(BOOKMARK_DB_PATH, user)
     tables = bookmark_manager.get_tables()
+    # check if database has been populated with tables
     if len(tables) == 0:
         bookmark_manager.create_bookmarks_db()
+    # if user not in database, add them
     bookmark_manager.check_existing_user()
+    # if video not in database, add it
+    bookmark_manager.check_video_in_db(video_id)
     print(video_id, user)
 
-    #try get user bookmarks for video
 
     return redirect(url_for("video"))
 
