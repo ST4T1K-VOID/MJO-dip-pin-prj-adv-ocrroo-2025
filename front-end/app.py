@@ -3,7 +3,7 @@ import requests
 from flask import Flask
 from flask import render_template, redirect
 from flask import request, url_for, session
-from  import BookmarkManager, Bookmark
+from bookmark_utils import BookmarkManager, Bookmark
 import json
 
 app = Flask(__name__)
