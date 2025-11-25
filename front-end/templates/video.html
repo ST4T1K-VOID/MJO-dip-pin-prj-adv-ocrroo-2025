@@ -38,6 +38,38 @@
             </script>
         </div>
 
+        <div id="bookmark_area" class="w-full">
+            {% if bookmarks %}
+            <ul id="bookmark_bar" class="flex flex-row gap-5 overflow-x-auto w-auto justify-between align-middle
+            list-none">
+                {% for bookmark in bookmarks %}
+                <li>
+                    <form action="/load-bookmark" method="post">
+                    <button type="submit" name="bookmark_id" class="bg-gray-300 rounded-lg focus:bg-gray-500
+                    hover:bg-gray-500 block
+                     text-center gap-4 border border-black
+                     max-h-[25px]" value="{{bookmark['id']}}">
+                        <h3 class="font-[16px] ">{{ bookmark["title"] }}</h3>
+                        <p class="text-sm">{{ bookmark['time'] }}</p>
+                    </button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <form id="new_bookmark_form" action="/add-bookmark" method="post">
+                <input type="hidden" name="bookmark_pos" id="Bookmark_pos" value="{{current_time}}">
+                <input type="text" name="bookmark_title" id="add_bookmark_title_box">
+                <button id="add_bookmark_button"  type="submit"
+                        class="bg-white p-6 lg:p-10 rounded-lg
+                            focus:bg-zinc-400 hover:bg-gray-400
+                            ease-in-out transition-colors duration-250
+                            flex text-sm font-medium justify-center
+                            shadow-md">Add Bookmark</button>
+            </form>
+        </div>
+
+
         <div class="rounded p-6 ">
             <form action="/generate-transcript" class="flex flex-col"
                   method="POST">
@@ -56,11 +88,13 @@
 
                 <script>
                     video = document.getElementById('Video');
-                    output = document.getElementById('Video_pos')
+                    output = document.getElementById('Video_pos');
+                    bookmark_timer = document.getElementById("Bookmark_pos");
                     video.ontimeupdate = () => {
                         let pos = parseInt(video.currentTime)
                         console.log(pos);
                         output.value = pos;
+                        bookmark_timer.value = pos;
                     }
                 </script>
             </form>
