@@ -62,14 +62,15 @@ def login():
 @app.route("/video")
 def video():
     """
-    (TODO: loads the stored (in the session) video)
+    loads selected video current time (upon reload)
     and a sends a transcript to the template if possible
     """
     global bookmark_manager
     
     transcript = request.args.get("transcript")
-    video_path = session.get('video')
     current_time = request.args.get("current_time")
+
+    video_path = session.get('video')
     bookmarks = bookmark_manager.load_bookmarks_for_video(session['video']['video_id'])
     print(transcript)
 
@@ -102,10 +103,13 @@ def get_transcript():
     get the ocr for a given time (in seconds) from the API
     redirect to /video with the transcript
     """
+    video_id = session.get('video')
     video_position = request.form['video_pos']
 
-    url = f"http://127.0.0.1:8000/video/OOP/frame/{video_position}/ocr"
+    url = f"http://127.0.0.1:8000/video/{video_id}/frame/{video_position}/ocr"
     response = requests.get(url).content
+
+    print("url: ", url)
 
     response = response.decode(encoding='utf-8')
 
