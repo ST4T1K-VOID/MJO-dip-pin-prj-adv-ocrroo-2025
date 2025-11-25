@@ -6,7 +6,7 @@ from flask import request, url_for, session
 
 
 app = Flask(__name__)
-
+app.secret_key = "very_secret_key"
 
 # NOTE: flask run --port 8001 --debug
 
@@ -35,7 +35,7 @@ def login():
 
     path = f"front-end/static/media/{video_id}.mp4"
 
-    session['video'] = {'video_id': video_id, 'frontend_path': path}
+    session['video'] = video_id
     session['user'] = user
 
     print(video_id, user)
@@ -52,13 +52,14 @@ def video():
     and a sends a transcript to the template if possible
     """
     transcript = request.args.get("transcript")
+    video_path = session.get('video')
 
-    print(transcript)
+    print(video_path)
 
     if transcript:
-        return render_template("video.html", transcript=transcript)
+        return render_template("video.html", transcript=transcript, video=video_path)
 
-    return render_template("video.html")
+    return render_template("video.html", video=video_path)
 
 
 @app.route("/generate-transcript", methods=["POST"])

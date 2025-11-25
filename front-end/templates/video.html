@@ -27,8 +27,8 @@
     <div class="grid grid-cols-1 gap-4 md:grid-cols-5">
         <div class="rounded md:col-span-2">
             <video controls id="Video" class="rounded-md">
-                <!-- todo: change src to accept the video path from session data -->
-                <source src="../static/media/oop.mp4" type="video/mp4">
+               <!-- TODO: test with different videos -->
+                <source src="../static/media/{{ video }}.mp4" type="video/mp4">
             </video>
         </div>
 
@@ -67,7 +67,7 @@
                       rows="8"
                       readonly>{% if transcript %}{{ transcript }}{% else %}No transcript available{% endif %}
             </textarea>
-            <!-- if/else is compressed to prevent unnecessary whitespace -->
+            <!-- if/else is compressed to reduce unnecessary whitespace -->
         </div>
     </div>
 </article>
