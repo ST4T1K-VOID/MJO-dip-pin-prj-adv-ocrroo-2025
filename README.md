@@ -33,6 +33,7 @@ before beginning ensure you have downloaded [Tesseract](https://github.com/UB-Ma
 to install the project dependecies, run this command:
 ```bash
 uv pip install -r pyproject.toml
+npm install
 ```
 ### 3. Provide project with Tesseract location
 locate this line:
@@ -42,18 +43,30 @@ pytesseract.pytesseract.tesseract_cmd = r""
 replace `r""` with the ___absolute___ path for your tesseract installation (specifically the .exe)  
 ## set-up / running
 
-### 1. Running the API
+### 1. Running the API and front end
 to run the API use:
 ```bash
-uv run fastapi dev [relative file location]
+cd ./api
+uv run fastapi dev simple_api.py --port 8000
 ```
-`[file location]` will be wherever `FastAPI` is instantiaded, in our case `./preliminary/simple_api.py`  
+the api must be run from port `8000` or the front end won't be able to find it
 you can test if the API is running by running a `curl` command from a diffferent terminal window/tab:
 ```bash
 curl 127.0.0.1:8000/[endpooint]
 ```
 `127.0.0.1:8000` may not work if you are running from a different port, you can check the terminal running the API.  
 for `endpoints` check [simple_api.py](./api/simple_api.py)
+to run the front end:
+```bash
+cd ./front_end
+flask run --port 8001 --debug
+```
+the front end can run on any port.
+you may also need to run tailwind (you will atleast for the first time setting up the project)
+```bash
+cd ./front_end
+npx @tailwindcss/cli -i ./static/src/input.css -o ./static/dist/output.css --watch
+```
 
 # How to Contribute
 
