@@ -1,11 +1,17 @@
+"""
+responsible for front_end rendering and validation/logic
+"""
+
 import requests
 
 from flask import Flask
 from flask import render_template, redirect
 from flask import request, url_for, session
-from .bookmark_utils import BookmarkManager
 
 import bleach
+
+from .bookmark_utils import BookmarkManager
+
 
 app = Flask(__name__)
 app.secret_key = "very_secret_key"
@@ -38,9 +44,9 @@ def login():
     gets the username and selected video entered by the user,
     enters video id and path, and the user's name to the session.
     """
-   
+
     global bookmark_manager, BOOKMARK_DB_PATH
-    
+
     user = request.form.get('username')
     if not validate(user):
         return redirect(url_for("index", is_invalid="True"))
@@ -73,36 +79,19 @@ def video():
     global bookmark_manager
     bookmark_manager = BookmarkManager(BOOKMARK_DB_PATH, session['user'])
 
-    transcript = request.args.get("transcript")
-    current_time = request.args.get("current_time")
-    video_path = session.get('video')
+    transcript = request.args.get("transcript") or None
+    current_time = request.args.get("current_time") or None
+    video_path = session.get('video') or None
 
-    bookmarks = bookmark_manager.load_bookmarks_for_video(session['video'])
+    bookmarks = bookmark_manager.load_bookmarks_for_video(session['video']) or None
 
     bookmark_manager.conn.close()
 
-    if bookmarks:
-        if transcript:
-            if current_time:
-                return render_template("video.html", video=video_path, bookmarks=bookmarks, transcript=transcript, current_time=current_time)
-            else:
-                return render_template("video.html", video=video_path, bookmarks=bookmarks, transcript=transcript)
-        else:
-            if current_time:
-                return render_template("video.html", video=video_path, bookmarks=bookmarks, current_time=current_time)
-            else:
-                return render_template("video.html", video=video_path, bookmarks=bookmarks)
-    else:
-        if transcript:
-            if current_time:
-                return render_template("video.html", video=video_path, current_time=current_time, transcript=transcript)
-            else:
-                return render_template("video.html", video=video_path, transcript=transcript)
-        else:
-            if current_time:
-                return render_template("video.html", video=video_path, current_time=current_time)
-            else:
-                return render_template("video.html", video=video_path)
+    return render_template("video.html",
+                           video=video_path,
+                           bookmarks=bookmarks,
+                           transcript=transcript,
+                           current_time=current_time)
 
 @app.route("/generate-transcript", methods=["POST"])
 def get_transcript():
@@ -138,6 +127,10 @@ def load_bookmark():
 
 @app.route("/add-bookmark", methods=["POST"])
 def add_bookmark():
+    """
+    save a time(as seconds) in the opened video in the database as a bookmark,
+    the bookmark is tied to the user.
+    """
 
     time = request.form['bookmark_pos']
     title = request.form['bookmark_title']
@@ -152,6 +145,9 @@ def add_bookmark():
 
 
 def validate(username: str):
+    """
+    sanitize and validate entered string(username)
+    """
     username = bleach.clean(username)
 
     if len(username) > 32 or len(username) < 2:
