@@ -4,7 +4,8 @@ from flask import Flask
 from flask import render_template, redirect
 from flask import request, url_for, session
 from .bookmark_utils import BookmarkManager
-import json
+
+import bleach
 
 app = Flask(__name__)
 app.secret_key = "very_secret_key"
@@ -19,13 +20,16 @@ def index():
     """gets a list of videos from the api and loads the indexs/login page"""
 
     videos = requests.get("http://127.0.0.1:8000/video").json()
+    is_invalid = request.args.get("is_invalid")
 
     if videos['count'] == 0:
         videos = None
 
     print(videos['videos'])
 
-    return render_template("index.html", videos=videos['videos'])
+    print("valid?: ", is_invalid)
+
+    return render_template("index.html", videos=videos['videos'], is_invalid=bool(is_invalid))
 
 
 @app.route("/login", methods=["POST"])
@@ -37,8 +41,11 @@ def login():
    
     global bookmark_manager, BOOKMARK_DB_PATH
     
-    video_id = request.form.get('video')
     user = request.form.get('username')
+    if not validate(user):
+        return redirect(url_for("index", is_invalid="True"))
+
+    video_id = request.form.get('video')
 
     session['video'] = video_id
     session['user'] = user
@@ -49,11 +56,10 @@ def login():
     if len(tables) == 0:
         bookmark_manager.create_bookmarks_db()
     # if user not in database, add them
-    print(bookmark_manager.check_user_in_db())
-
+    bookmark_manager.check_user_in_db()
     # if video not in database, add it
-    # bookmark_manager.check_video_in_db(video_id)
-    # bookmark_manager.conn.close()
+    bookmark_manager.check_video_in_db(video_id)
+    bookmark_manager.conn.close()
 
     return redirect(url_for("video"))
 
@@ -143,3 +149,12 @@ def add_bookmark():
     bookmark_manager.conn.close()
 
     return redirect(url_for("video", current_time=time))
+
+
+def validate(username: str):
+    username = bleach.clean(username)
+
+    if len(username) > 32 or len(username) < 2:
+        return False
+
+    return username

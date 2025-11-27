@@ -23,11 +23,14 @@
         <div>
             <label for="Username">username: </label>
             <input id="Username" name="username" type="text" placeholder="enter username..."
-                   class="rounded-md bg-gray-100 border border-gray-400 p-2 mb-10" required>
+                   class="rounded-md bg-gray-100 border border-gray-400 p-2" required>
+            {% if is_invalid %}
+            <p class="text-sm text-red-500 underline mb-10"> Invalid username, username must be between 2 and 32 characters. </p>
+            {% endif %}
         </div>
         {% if videos %}
         <fieldset class="mb-10">
-            <legend>Select from Available Videos:</legend>
+            <legend class="text-center">Select from Available Videos:</legend>
 
             <div>
                 <input required type="radio" id="{{ videos[0]['id'] }}" name="video" value="{{ videos[0]['id'] }}" checked/>

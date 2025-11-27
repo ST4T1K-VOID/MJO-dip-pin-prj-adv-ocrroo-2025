@@ -18,7 +18,7 @@ import numpy as np
 from PIL import Image
 import pytesseract
 
-pytesseract.pytesseract.tesseract_cmd = r"C:\Users\OBRIEM.TDM\source\repos\tesseract\tesseract.exe"
+# pytesseract.pytesseract.tesseract_cmd = r"C:\Users\OBRIEM.TDM\source\repos\tesseract\tesseract.exe"
 
 VID_PATH = Path("media/oop.mp4")
 OUT_PATH = Path("media/images/")
